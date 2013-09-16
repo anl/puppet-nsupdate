@@ -35,7 +35,41 @@
 #
 # Copyright 2013 Your name here, unless otherwise noted.
 #
-class nsupdate {
+class nsupdate(
+  $base_url = 'https://raw.github.com/anl/nsupdate-wrapper', # no trailing '/'
+  $checksum = '7dd37d2d6ce6bfe306e2a1e777a25e285210ebd302ee8149654570e6fb5e37bb',
+  $file_name = 'do_nsupdate.sh',
+  $install_path = '/opt/nsupdate', # no trailing '/'
+  $shasum_pkg = 'perl',
+  $version = '0.1.0'
+  ) {
 
+  ensure_packages(['wget'])
+
+  $install_dir = "${install_path}/bin"
+  $file_path = "${install_dir}/${file_name}"
+  $url = "${base_url}/${version}/${file_name}"
+
+  file { $install_path:
+    ensure => 'directory',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0555',
+  }
+
+  file { $install_dir:
+    ensure  => 'directory',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0555',
+    require => File[$install_path],
+  }
+
+  exec { "download ${file_name}":
+    command => "/usr/bin/wget ${url}",
+    cwd     => $install_dir,
+    require => File[$install_dir],
+    unless  => "/usr/bin/shasum -a 256 ${file_path} | /bin/grep ${checksum}",
+  }
 
 }

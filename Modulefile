@@ -1,11 +1,11 @@
 name    'anl-nsupdate'
 version '0.1.0'
-source 'UNKNOWN'
+source 'https://github.com/anl/puppet-nsupdate.git'
 author 'anl'
 license 'Apache License, Version 2.0'
-summary 'UNKNOWN'
-description 'UNKNOWN'
-project_page 'UNKNOWN'
+summary 'nsupdate module'
+description 'Install script to update BIND DNS via nsupdate'
+project_page 'https://github.com/anl/puppet-nsupdate'
 
 ## Add dependencies, if any:
-# dependency 'username/name', '>= 1.2.0'
+dependency 'puppetlabs/stdlib', '>= 3.2.0'
