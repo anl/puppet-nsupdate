@@ -99,6 +99,13 @@ class nsupdate(
     unless  => "/usr/bin/shasum -a 256 ${file_path} | /bin/grep ${checksum}",
   }
 
+  file { $keyfile:
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0400',
+    content => $key_contents,
+  }
+
   if $on_boot {
     rclocal::register { 'nsupdate':
       content => template('nsupdate/rc.local.fragment.erb')
