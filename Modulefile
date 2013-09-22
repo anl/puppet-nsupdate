@@ -8,4 +8,5 @@ description 'Install script to update BIND DNS via nsupdate'
 project_page 'https://github.com/anl/puppet-nsupdate'
 
 ## Add dependencies, if any:
+dependency 'anl/rclocal', '>= 0.0.1'
 dependency 'puppetlabs/stdlib', '>= 3.2.0'

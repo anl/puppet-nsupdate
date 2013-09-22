@@ -1,3 +1,10 @@
 # Include this module
-include nsupdate
+include rclocal
+
+class { 'nsupdate':
+  keyfile    => '/root/nsupdate.key',
+  nameserver => 'ns.example.com',
+  rr         => 'host.example.com',
+  zone       => 'example.com',
+}
 
