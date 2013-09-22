@@ -93,7 +93,7 @@ class nsupdate(
   }
 
   exec { "download ${file_name}":
-    command => "/usr/bin/wget ${url}",
+    command => "/usr/bin/wget ${url} && chmod 555 ${file_name}",
     cwd     => $install_dir,
     require => File[$install_dir],
     unless  => "/usr/bin/shasum -a 256 ${file_path} | /bin/grep ${checksum}",
