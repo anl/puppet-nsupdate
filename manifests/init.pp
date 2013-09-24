@@ -84,7 +84,7 @@ class nsupdate(
   $zone = ''
   ) {
 
-  ensure_packages(['wget'])
+  ensure_packages([$shasum_pkg, 'wget'])
 
   unless is_string($keyfile) {
     fail('Invalid keyfile path')
