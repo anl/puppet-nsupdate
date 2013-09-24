@@ -1,39 +1,72 @@
 # == Class: nsupdate
 #
-# Full description of class nsupdate here.
+# Deploy infrastructure for a node to update its DNS record using nsupdate.
 #
 # === Parameters
 #
-# Document parameters here.
+# [*base_url*]
+#   Base of the URL from which nsupdate wrapper script should be downloaded.
+#   Should not have a trailing slash ("/").
 #
-# [*sample_parameter*]
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
+# [*checksum*]
+#   SHA256 checksum of nsupdate wrapper script.
 #
-# === Variables
+# [*install_path*]
+#   Top-level directory under which wrapper script will be installed; defaults
+#   to /opt/nsupdate.
 #
-# Here you should define a list of variables that this module would require.
+# [*key_contents*]
+#   Contents of the dnssec key file used by the "nsupdate" binary.  Default
+#   of an empty string will cause updates to fail - populating this is
+#   mandatory for intended functionality.
 #
-# [*sample_variable*]
-#   Explanation of how this variable affects the funtion of this class and if it
-#   has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#   External Node Classifier as a comma separated list of hostnames." (Note,
-#   global variables should not be used in preference to class parameters  as of
-#   Puppet 2.6.)
+# [*keyfile*]
+#   Path to dnssec key file used by the "nsupdate" binary.  Must be set; note
+#   that file name is important for nsupdate to function correctly - e.g. must
+#   be something similar to
+#   "/root/Kec2-puppet.dyn.hurricane-ridge.com.+157+10777.key" - cannot simply
+#   be "/root/nsupdate.key".
+#
+# [*nameserver*]
+#   DNS server to which updates will be sent.  Must be a valid domain name.
+#
+# [*on_boot*]
+#   If true (default), update DNS record on boot via /etc/rc.local.
+#
+# [*rr*]
+#   DNS Resource Record to update; must be a valid domain name.
+#
+# [*ttl*]
+#   TTL for RR that will be updated; default: 120s.
+#
+# [*shasum_pkg*]
+#   Package that includes "shasum" binary; defaults to "perl" for Ubuntu
+#   compatibility.
+#
+# [*version*]
+#   Version of nsupdate wrapper script to download; used in constructing
+#   download URL; default: 0.1.0.
+#
+# [*zone*]
+#   DNS zone to which updates should be applied; must be a valid domain name.
 #
 # === Examples
 #
-#  class { nsupdate:
-#    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ]
-#  }
+# class  { 'nsupdate':
+#   key_contents => 'dyn.example.com. IN KEY 512 3 157 WXakPayhg7tqS15w5wPdaVWQ+DpM19qHKQ272B5O6W4zPb1UtgqG/9xBOumVdkL8MnML2D/xh+fY3b9WApZrUA==',
+#   keyfile      => '/root/Kdyn.example.com.+157+10777.key',
+#   nameserver   => 'ns.example.com',
+#   rr           => 'host.example.com',
+#   zone         => 'example.com',
+# }
 #
 # === Authors
 #
-# Author Name <author@domain.com>
+# Andrew Leonard
 #
 # === Copyright
 #
-# Copyright 2013 Your name here, unless otherwise noted.
+# Copyright 2013 Andrew Leonard
 #
 class nsupdate(
   $base_url = 'https://raw.github.com/anl/nsupdate-wrapper', # no trailing '/'
